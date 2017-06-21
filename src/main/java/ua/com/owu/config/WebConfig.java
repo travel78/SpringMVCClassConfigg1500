@@ -11,6 +11,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import java.io.File;
 import java.util.Properties;
 
 @Configuration
@@ -33,12 +34,14 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         registry //
                 .addResourceHandler("/css/**")
                 .addResourceLocations("/static/styles/");
+        registry
+                .addResourceHandler("/img/**")
+                .addResourceLocations("file:" + System.getProperty("user.home") + File.separator + "images" + File.separator);
     }
 
 
-
     @Bean
-    public JavaMailSender javaMailSender(){
+    public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);

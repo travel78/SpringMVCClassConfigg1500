@@ -7,12 +7,16 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ua.com.owu.entity.Blog;
 import ua.com.owu.entity.Post;
 import ua.com.owu.service.BlogEditor;
 import ua.com.owu.service.BlogService;
 import ua.com.owu.service.PostService;
 import ua.com.owu.service.PostValidator;
+
+import java.io.File;
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/admin")
@@ -41,15 +45,26 @@ public class AdminController {
 
     @PostMapping("/saveBlog")
     public String saveBlog(@RequestParam("blogName") String bName,
-                           @RequestParam String blogDescript) {
-        blogService.save(bName, blogDescript);
+                           @RequestParam String blogDescript,
+                           @RequestParam MultipartFile picture) throws IOException {
+        String realpath = System.getProperty("user.home") + File.separator + "images" + File.separator;
+        picture.transferTo(new File(realpath + picture.getOriginalFilename()));
+
+        Blog blog = Blog.builder()
+                .blogTitle(bName)
+                .blogDescription(blogDescript)
+                .picture("/img/" + picture.getOriginalFilename())
+                .build();
+
+        blogService.save(blog);
+
         return "index";
     }
 
 
     @PostMapping("/savePost")
     public String savePost(@ModelAttribute("emptyPost") @Validated Post post, BindingResult result) {
-        if(result.hasErrors()){
+        if (result.hasErrors()) {
             return "adminPage";
         }
         postService.save(post);

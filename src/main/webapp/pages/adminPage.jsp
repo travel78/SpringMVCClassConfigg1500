@@ -1,8 +1,9 @@
 <%@include file="templates/header.jsp" %>
 
-<form action="/admin/saveBlog" method="post">
+<form action="/admin/saveBlog" method="post" enctype="multipart/form-data">
     <input type="text" name="blogName">
     <input type="text" name="blogDescript">
+    <input type="file" name="picture">
 
     <input type="submit">
 </form>

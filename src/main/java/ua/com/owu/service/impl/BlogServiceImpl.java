@@ -25,6 +25,11 @@ public class BlogServiceImpl implements BlogService {
 
     }
 
+    @Override
+    public void save(Blog blog) {
+        blogDAO.save(blog);
+    }
+
     public Blog findOne(Integer id) {
         return blogDAO.findOne(id);
     }
