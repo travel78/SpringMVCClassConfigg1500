@@ -1,14 +1,17 @@
 package ua.com.owu.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ua.com.owu.entity.Blog;
 import ua.com.owu.entity.Post;
+import ua.com.owu.entity.User;
 import ua.com.owu.service.BlogService;
 import ua.com.owu.service.MailService;
 import ua.com.owu.service.PostService;
+import ua.com.owu.service.UserService;
 
 import java.util.List;
 
@@ -92,6 +95,15 @@ public class MainController {
     public String subscribe(@RequestParam String email) {
         mailService.sendMail(email, blogService.findOne(1));
         return "";
+    }
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @PostMapping("/saveUser")
+    public String saveUser(@RequestParam String username, @RequestParam String password){
+        userService.save(new User(username,passwordEncoder.encode(password)));
+        return "index";
     }
 }
 
