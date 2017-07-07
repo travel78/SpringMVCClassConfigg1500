@@ -105,5 +105,11 @@ public class MainController {
         userService.save(new User(username,passwordEncoder.encode(password)));
         return "index";
     }
+
+
+    @GetMapping("/rest")
+    public String rest(){
+        return "rest";
+    };
 }
 
