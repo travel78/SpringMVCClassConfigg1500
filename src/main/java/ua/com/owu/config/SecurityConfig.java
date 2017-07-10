@@ -14,6 +14,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.filter.CorsFilter;
 
 /**
  * Created by okten22 on 23.06.17.
@@ -34,26 +37,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void setUserDetailsService(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
+
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
-    public DaoAuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider provider=new DaoAuthenticationProvider();
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
 
-    public InMemoryUserDetailsManagerConfigurer<AuthenticationManagerBuilder> inMemory(){
+    public InMemoryUserDetailsManagerConfigurer<AuthenticationManagerBuilder> inMemory() {
         return new InMemoryUserDetailsManagerConfigurer<>();
     }
 
     @Autowired
-    public void configureInMemory(AuthenticationManagerBuilder auth, AuthenticationProvider provider) throws Exception{
-        inMemory().withUser("adm")
-                .password("adm")
+    public void configureInMemory(AuthenticationManagerBuilder auth, AuthenticationProvider provider) throws Exception {
+        inMemory().withUser("xxx")
+                .password("xxx")
                 .authorities("ROLE_ADMIN")
                 .and()
                 .configure(auth);
@@ -62,6 +67,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+//        CharacterEncodingFilter filter = new CharacterEncodingFilter();
+//        filter.setForceEncoding(true);
+//        filter.setEncoding("UTF-8");
+//        http.addFilterBefore(filter, CsrfFilter.class);
         http
                 .authorizeRequests()
                 .antMatchers("/").permitAll()

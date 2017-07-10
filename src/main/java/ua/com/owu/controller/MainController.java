@@ -17,8 +17,10 @@ import ua.com.owu.service.MailService;
 import ua.com.owu.service.PostService;
 import ua.com.owu.service.UserService;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -32,8 +34,8 @@ public class MainController {
 
     //    @RequestMapping(method = RequestMethod.GET, value = "/")
     @GetMapping({"/", "/hi"})
-    public String index(Model model) {
-        model.addAttribute("xxx", getPrincipal());
+    public String index(Model model, Principal principal) {
+        model.addAttribute("xxx", principal != null ? principal.getName() : "asdasdas");
         return "index";
     }
     private String getPrincipal(){
