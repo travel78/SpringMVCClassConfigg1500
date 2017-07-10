@@ -11,21 +11,21 @@
 
 <script>
     $('#ppp').click(function () {
-        var text=$('#text').val();
-        var title=$('#title').val();
+        var text = $('#text').val();
+        var title = $('#title').val();
 
-        var post={postText:text, postTitle:title};
-        post=JSON.stringify(post);
+        var post = {postText: text, postTitle: title};
+        post = JSON.stringify(post);
 
         $.ajax({
-            url:'/sp',
-            type:"POST",
+            url: '/sp',
+            type: "POST",
             contentType: 'application/json',
             data: post,
-            success:function () {
+            success: function () {
                 alert("Ok!");
             },
-            error:function () {
+            error: function () {
                 alert('error!');
             }
         });
@@ -44,10 +44,10 @@
         $("#convert").empty();
         $.ajax({
             url: "/showAll",
-            type:'GET',
+            type: 'GET',
             success: function (result) {
                 $(result).each(function () {
-                    $('#convert').append($("<p/>",{text:this.postTitle+" "+this.postText}))
+                    $('#convert').append($("<p/>", {text: this.postTitle + " " + this.postText}))
                 })
             }
         });

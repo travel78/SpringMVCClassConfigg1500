@@ -68,10 +68,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").access("hasRole('ADMIN')")
                 .and()
                 .formLogin()
-//                .loginPage("/urlWhereLogging")
-//                .passwordParameter("...")
-//                .usernameParameter("..")
+                .loginPage("/login")
+                .passwordParameter("ssoId")
+                .usernameParameter("password")
                 .and()
                 .csrf();
     }
+
+//    @Autowired
+//    public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.inMemoryAuthentication().withUser("bill").password("abc123").roles("USER");
+//        auth.inMemoryAuthentication().withUser("admin").password("root123").roles("ADMIN");
+//        auth.inMemoryAuthentication().withUser("dba").password("root123").roles("ADMIN","DBA");
+//    }
+//
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//
+//        http.authorizeRequests()
+//                .antMatchers("/", "/home").permitAll()
+//                .antMatchers("/admin/**").access("hasRole('ADMIN')")
+//                .antMatchers("/db/**").access("hasRole('ADMIN') and hasRole('DBA')")
+//                .and().formLogin().loginPage("/login")
+//                .usernameParameter("ssoId").passwordParameter("password")
+//                .and().exceptionHandling().accessDeniedPage("/Access_Denied");
+//    }
 }

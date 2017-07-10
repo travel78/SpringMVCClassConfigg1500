@@ -1,6 +1,8 @@
 package ua.com.owu.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -40,7 +42,20 @@ public class AdminController {
     public String toAdminPage(Model model) {
         model.addAttribute("emptyPost", Post.builder().postTitle("test").postText("text").build());
         model.addAttribute("blogs", blogService.findAll());
+        model.addAttribute("user",getPrincipal());
         return "adminPage";
+    }
+    private String getPrincipal(){
+        String userName = null;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserDetails) {
+            userName = ((UserDetails)principal).getUsername();
+        } else {
+//            userName = principal.toString();
+            userName = "Щоб отримати доступ до остальних сторінок потрібно залогінитись";
+        }
+        return userName;
     }
 
     @PostMapping("/saveBlog")
@@ -63,13 +78,23 @@ public class AdminController {
 
 
     @PostMapping("/savePost")
-    public String savePost(@ModelAttribute("emptyPost") @Validated Post post, BindingResult result) {
+    public String savePost(@ModelAttribute("emptyPost") @Validated Post post, BindingResult result, Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("blogs", blogService.findAll());
             return "adminPage";
         }
         postService.save(post);
         return "redirect:/admin/toAdminPage";
     }
+
+//    @GetMapping(value="/logout")
+//    public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        if (auth != null){
+//            new SecurityContextLogoutHandler().logout(request, response, auth);
+//        }
+//        return "redirect:/admin/login";
+//    }
 
 
     @Autowired

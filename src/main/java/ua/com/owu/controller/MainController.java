@@ -1,7 +1,11 @@
 package ua.com.owu.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +17,8 @@ import ua.com.owu.service.MailService;
 import ua.com.owu.service.PostService;
 import ua.com.owu.service.UserService;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
@@ -27,10 +33,21 @@ public class MainController {
     //    @RequestMapping(method = RequestMethod.GET, value = "/")
     @GetMapping({"/", "/hi"})
     public String index(Model model) {
-        model.addAttribute("xxx", "ракамакафон");
+        model.addAttribute("xxx", getPrincipal());
         return "index";
     }
+    private String getPrincipal(){
+        String userName = null;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+        if (principal instanceof UserDetails) {
+            userName = ((UserDetails)principal).getUsername();
+        } else {
+//            userName = principal.toString();
+            userName = "Щоб отримати доступ до остальних сторінок потрібно залогінитись";
+        }
+        return userName;
+    }
 
     @GetMapping("/showAllBlogs")
     public String showAllBlogs(Model model) {
@@ -111,5 +128,20 @@ public class MainController {
     public String rest(){
         return "rest";
     };
+
+    @PostMapping("/login")
+    public String loginPage(){
+        return "adminPage";
+    }
+    @RequestMapping(value="/logout", method = RequestMethod.GET)
+    public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null){
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+        return "redirect:/hi";
+    }
+
 }
 

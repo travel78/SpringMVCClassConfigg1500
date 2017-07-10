@@ -13,12 +13,18 @@
 <hr>
 <a href="/admin/toAdminPage">toAdminPage</a>
 
-<form action="/saveUser" method="post">
-    <input type="text" name="username">
-    <input type="password" name="password">
+<form action="/saveUser" method="post" ng>
+    <input value="" type="text" name="username" autocomplete="off">
+    <input value="" type="password" name="password" autocomplete="off">
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
     <input type="submit">
 </form>
+
+
+
+
+
+
 
 </body>
 </html>

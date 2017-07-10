@@ -10,9 +10,9 @@
 
 <sf:form action="/admin/savePost" method="post" modelAttribute="emptyPost">
     <sf:input path="id" type="hidden"/>
-    <sf:input path="postTitle"/>
-    <sf:errors path="postTitle"/>
-    <sf:input path="postText"/>
+    <sf:input path="postTitle"  autocomplete="false"/>
+    <sf:errors path="postTitle" />
+    <sf:input path="postText" autocomplete="false"/>
     <sf:select path="blog">
         <c:forEach items="${blogs}" var="blog">
             <sf:option value="${blog.id}">${blog.blogTitle}</sf:option>
@@ -20,6 +20,10 @@
     </sf:select>
     <input type="submit">
 </sf:form>
+
+<hr>
+Dear <strong>${user}</strong>, Welcome to Admin Page.
+<a href="<c:url value="/logout" />">Logout</a>
 
 </body>
 </html>
